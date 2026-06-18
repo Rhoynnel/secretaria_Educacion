@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('nomina.tipo_nominas', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo', 1)->unique();
+            $table->integer('codigo')->unique();
             $table->string('nombre')->unique();
             $table->boolean('status')->default(true);
             $table->string('abreviatura', 2)->unique();
