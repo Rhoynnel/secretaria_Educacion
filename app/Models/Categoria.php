@@ -9,7 +9,13 @@ class Categoria extends Model
     protected $table = 'nomina.categorias';
 
     protected $fillable = [
+        'codigo',
         'nombre',
-        'porcentaje',
+        'sueldo',
     ];
+
+    public function cargos()
+    {
+        return $this->hasMany(Cargo::class);
+    }
 }

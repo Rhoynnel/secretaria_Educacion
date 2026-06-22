@@ -1,44 +1,54 @@
 <?php
 
-namespace App\Filament\Resources\Antiguedads;
+namespace App\Filament\Resources\Dependencias;
 
-use App\Filament\Resources\Antiguedads\Pages\ManageAntiguedads;
-use App\Models\Antiguedad;
+use App\Filament\Resources\Dependencias\Pages\ManageDependencias;
+use App\Models\Dependencia;
+use App\Models\Municipio;
 use BackedEnum;
-use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Set;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class AntiguedadResource extends Resource
+class DependenciaResource extends Resource
 {
-    protected static ?string $model = Antiguedad::class;
+    protected static ?string $model = Dependencia::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Nomina';
-
-    protected static ?string $recordTitleAttribute = 'Antiguedad';
+    protected static ?string $recordTitleAttribute = 'Dependencia';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('anos')
+                TextInput::make('codigo')
+                    ->required(),
+                TextInput::make('nombre')
+                    ->required(),
+                Toggle::make('rural')
+                    ->required(),
+                Toggle::make('marginal')
+                    ->required(),
+                TextInput::make('direccion'),
+                Select::make('municipio_id')
+                    ->label('Municipio')
                     ->required()
-                    ->numeric(),
-                TextInput::make('porcentaje')
-                    ->required()
-                    ->numeric(),
+                    ->options(Municipio::pluck('nombre', 'id')),
             ]);
     }
 
@@ -46,9 +56,16 @@ class AntiguedadResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('anos')
-                    ->numeric(),
-                TextEntry::make('porcentaje')
+                TextEntry::make('codigo'),
+                TextEntry::make('nombre'),
+                IconEntry::make('rural')
+                    ->boolean(),
+                IconEntry::make('marginal')
+                    ->boolean(),
+                TextEntry::make('direccion')
+                    ->placeholder('-'),
+                TextEntry::make('municipio_id')
+                    ->label('Municipio')
                     ->numeric(),
                 TextEntry::make('created_at')
                     ->dateTime()
@@ -62,12 +79,21 @@ class AntiguedadResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Antiguedad')
+            ->recordTitleAttribute('Dependencia')
             ->columns([
-                TextColumn::make('anos')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('porcentaje')
+                TextColumn::make('codigo')
+                    ->searchable(),
+                TextColumn::make('nombre')
+                    ->searchable(),
+                IconColumn::make('rural')
+                    ->boolean(),
+                IconColumn::make('marginal')
+                    ->boolean(),
+                TextColumn::make('direccion')
+                    ->searchable(),
+                TextColumn::make('municipio_id')
+                    ->label('Municipio')
+                    ->searchable()
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -97,7 +123,7 @@ class AntiguedadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageAntiguedads::route('/'),
+            'index' => ManageDependencias::route('/'),
         ];
     }
 }

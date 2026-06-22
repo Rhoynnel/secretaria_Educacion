@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('docente.dependencias', function (Blueprint $table) {
+        Schema::create('comun.parroquias', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo', 4)->unique();
             $table->string('nombre');
-            $table->boolean('rural')->default(false);
-            $table->boolean('marginal')->default(false);
-            $table->string('direccion')->nullable();
-            $table->foreignId('municipio_id')->nullable()->constrained('comun.municipios')->onDelete('set null');
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('docente.dependencias');
+        Schema::dropIfExists('comun.parroquias');
     }
 };

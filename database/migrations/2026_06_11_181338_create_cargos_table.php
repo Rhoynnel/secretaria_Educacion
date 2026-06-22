@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('docente.cargos', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo',4)->unique();
+            $table->string('codigo',4);
             $table->string('nombre');
             $table->foreignId('categoria_id')->constrained('nomina.categorias')->onDelete('cascade');
             $table->foreignId('tipo_nomina_id')->constrained('nomina.tipo_nominas')->onDelete('cascade');
             $table->timestamps();
+            $table->unique(['codigo','tipo_nomina_id']);
         });
     }
 

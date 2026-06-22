@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TipoNominas;
 use App\Filament\Resources\TipoNominas\Pages\ManageTipoNominas;
 use App\Models\TipoNomina;
 use BackedEnum;
+use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -26,6 +27,8 @@ class TipoNominaResource extends Resource
     protected static ?string $model = TipoNomina::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string | UnitEnum | null $navigationGroup =  'Nomina';
 
     protected static ?string $recordTitleAttribute = 'TipoNomina';
 

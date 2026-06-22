@@ -21,4 +21,9 @@ class Dependencia extends Model
     {
         return $this->belongsTo(Municipio::class);
     }
+
+    public function ners()
+    {
+        return $this->hasMany(Ner::class);
+    }
 }

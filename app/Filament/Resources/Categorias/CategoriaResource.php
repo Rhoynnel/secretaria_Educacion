@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Antiguedads;
+namespace App\Filament\Resources\Categorias;
 
-use App\Filament\Resources\Antiguedads\Pages\ManageAntiguedads;
-use App\Models\Antiguedad;
+use App\Filament\Resources\Categorias\Pages\ManageCategorias;
+use App\Models\Categoria;
 use BackedEnum;
 use UnitEnum;
 use Filament\Actions\BulkActionGroup;
@@ -19,24 +19,26 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-class AntiguedadResource extends Resource
+class CategoriaResource extends Resource
 {
-    protected static ?string $model = Antiguedad::class;
+    protected static ?string $model = Categoria::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Nomina';
+    protected static string | UnitEnum | null $navigationGroup =  'Nomina';
 
-    protected static ?string $recordTitleAttribute = 'Antiguedad';
+    protected static ?string $recordTitleAttribute = 'Categoria';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('anos')
+                TextInput::make('codigo')
                     ->required()
                     ->numeric(),
-                TextInput::make('porcentaje')
+                TextInput::make('nombre')
+                    ->required(),
+                TextInput::make('sueldo')
                     ->required()
                     ->numeric(),
             ]);
@@ -46,9 +48,10 @@ class AntiguedadResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('anos')
+                TextEntry::make('codigo')
                     ->numeric(),
-                TextEntry::make('porcentaje')
+                TextEntry::make('nombre'),
+                TextEntry::make('sueldo')
                     ->numeric(),
                 TextEntry::make('created_at')
                     ->dateTime()
@@ -62,12 +65,14 @@ class AntiguedadResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Antiguedad')
+            ->recordTitleAttribute('Categoria')
             ->columns([
-                TextColumn::make('anos')
+                TextColumn::make('codigo')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('porcentaje')
+                TextColumn::make('nombre')
+                    ->searchable(),
+                TextColumn::make('sueldo')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('created_at')
@@ -97,7 +102,7 @@ class AntiguedadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageAntiguedads::route('/'),
+            'index' => ManageCategorias::route('/'),
         ];
     }
 }

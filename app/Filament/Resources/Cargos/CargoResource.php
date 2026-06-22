@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Filament\Resources\Antiguedads;
+namespace App\Filament\Resources\Cargos;
 
-use App\Filament\Resources\Antiguedads\Pages\ManageAntiguedads;
-use App\Models\Antiguedad;
+use App\Filament\Resources\Cargos\Pages\ManageCargos;
+use App\Models\Cargo;
+use App\Models\Categoria;
+use App\Models\TipoNomina;
 use BackedEnum;
-use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -18,27 +19,30 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Forms\Components\select;
 
-class AntiguedadResource extends Resource
+class CargoResource extends Resource
 {
-    protected static ?string $model = Antiguedad::class;
+    protected static ?string $model = Cargo::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Nomina';
-
-    protected static ?string $recordTitleAttribute = 'Antiguedad';
+    protected static ?string $recordTitleAttribute = 'Cargo';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('anos')
+                TextInput::make('codigo')
+                    ->required(),
+                TextInput::make('nombre')
+                    ->required(),
+                Select::make('categoria_id')
                     ->required()
-                    ->numeric(),
-                TextInput::make('porcentaje')
+                    ->options(Categoria::pluck('nombre', 'id')),
+                Select::make('tipo_nomina_id')
                     ->required()
-                    ->numeric(),
+                    ->options(TipoNomina::where('status', true)->pluck('nombre', 'id')),
             ]);
     }
 
@@ -46,10 +50,12 @@ class AntiguedadResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('anos')
-                    ->numeric(),
-                TextEntry::make('porcentaje')
-                    ->numeric(),
+                TextEntry::make('codigo'),
+                TextEntry::make('nombre'),
+                TextEntry::make('categoria.nombre')
+                    ->label('Categoria'),
+                TextEntry::make('TipoNomina.nombre')
+                    ->label('Tipo de Nómina'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
@@ -62,13 +68,20 @@ class AntiguedadResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Antiguedad')
+            ->recordTitleAttribute('Cargo')
             ->columns([
-                TextColumn::make('anos')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('porcentaje')
-                    ->numeric()
+                TextColumn::make('codigo')
+                    ->searchable(),
+                TextColumn::make('nombre')
+                    ->searchable(),
+                TextColumn::make('Categoria.nombre')
+                    ->label('Categoria')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('TipoNomina.nombre')
+                    ->label('Tipo de Nómina')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
@@ -97,7 +110,7 @@ class AntiguedadResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageAntiguedads::route('/'),
+            'index' => ManageCargos::route('/'),
         ];
     }
 }
