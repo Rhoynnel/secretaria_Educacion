@@ -10,10 +10,16 @@ class Parroquia extends Model
 
     protected $fillable = [
         'nombre',
+        'municipio_id',
     ];
 
     public function ners()
     {
         return $this->hasMany(Ner::class);
+    }
+
+    public function municipio()
+    {
+        return $this->belongsTo(Municipio::class);
     }
 }

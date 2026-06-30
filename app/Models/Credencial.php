@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Credencial extends Model
 {
-    protected $table = 'credencial.credenciales';
+    protected $table = 'credencial.credencials';
 
     protected $fillable = [
         'periodo_id',

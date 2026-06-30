@@ -10,6 +10,7 @@ class Periodo extends Model
 
     protected $fillable = [
         'periodo',
+        'status',
         
     ];
 

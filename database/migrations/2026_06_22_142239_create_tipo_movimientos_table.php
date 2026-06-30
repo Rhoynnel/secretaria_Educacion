@@ -21,6 +21,7 @@ return new class extends Migration
         Schema::create('credencial.movimientos_sustitucion', function (Blueprint $table) {
             $table->id();
             $table->string('nombre')->unique();
+            $table->timestamps();
         });
 
         

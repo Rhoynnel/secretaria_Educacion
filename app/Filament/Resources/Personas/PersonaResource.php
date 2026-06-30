@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Personas;
 use App\Filament\Resources\Personas\Pages\ManagePersonas;
 use App\Models\Persona;
 use BackedEnum;
+use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -25,6 +26,8 @@ class PersonaResource extends Resource
     protected static ?string $model = Persona::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string | UnitEnum | null $navigationGroup =  'Docentes';
 
     protected static ?string $recordTitleAttribute = 'Persona';
 

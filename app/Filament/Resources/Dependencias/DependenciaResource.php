@@ -6,6 +6,7 @@ use App\Filament\Resources\Dependencias\Pages\ManageDependencias;
 use App\Models\Dependencia;
 use App\Models\Municipio;
 use BackedEnum;
+use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -30,6 +31,8 @@ class DependenciaResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
+    protected static string | UnitEnum | null $navigationGroup =  'Docentes';
+
     protected static ?string $recordTitleAttribute = 'Dependencia';
 
     public static function form(Schema $schema): Schema
@@ -47,6 +50,7 @@ class DependenciaResource extends Resource
                 TextInput::make('direccion'),
                 Select::make('municipio_id')
                     ->label('Municipio')
+                    ->searchable()
                     ->required()
                     ->options(Municipio::pluck('nombre', 'id')),
             ]);

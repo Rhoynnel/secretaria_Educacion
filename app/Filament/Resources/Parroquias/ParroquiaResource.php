@@ -1,51 +1,44 @@
 <?php
 
-namespace App\Filament\Resources\Cargos;
+namespace App\Filament\Resources\Parroquias;
 
-use App\Filament\Resources\Cargos\Pages\ManageCargos;
-use App\Models\Cargo;
-use App\Models\Categoria;
-use App\Models\TipoNomina;
+use App\Filament\Resources\Parroquias\Pages\ManageParroquias;
+use App\Models\Parroquia;
+use App\Models\Municipio;
 use BackedEnum;
-use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Forms\Components\select;
 
-class CargoResource extends Resource
+class ParroquiaResource extends Resource
 {
-    protected static ?string $model = Cargo::class;
+    protected static ?string $model = Parroquia::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup =  'Docentes';
-
-    protected static ?string $recordTitleAttribute = 'Cargo';
+    protected static ?string $recordTitleAttribute = 'Parroquia';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('codigo')
-                    ->required(),
                 TextInput::make('nombre')
                     ->required(),
-                Select::make('categoria_id')
+                Select::make('municipio_id')
+                    ->label('Municipio')
                     ->required()
-                    ->options(Categoria::pluck('nombre', 'id')),
-                Select::make('tipo_nomina_id')
-                    ->required()
-                    ->options(TipoNomina::where('status', true)->pluck('nombre', 'id')),
+                    ->searchable()
+                    ->options(Municipio::pluck('nombre', 'id')),
             ]);
     }
 
@@ -53,12 +46,9 @@ class CargoResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('codigo'),
                 TextEntry::make('nombre'),
-                TextEntry::make('Categoria.nombre')
-                    ->label('Categoria'),
-                TextEntry::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina'),
+                TextEntry::make('Municipio.nombre')
+                    ->label('Municipio'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
@@ -71,21 +61,14 @@ class CargoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Cargo')
+            ->recordTitleAttribute('Parroquia')
             ->columns([
-                TextColumn::make('codigo')
-                    ->searchable(),
                 TextColumn::make('nombre')
                     ->searchable(),
-                TextColumn::make('Categoria.nombre')
-                    ->label('Categoria')
-                    ->searchable()
+                TextColumn::make('Municipio.nombre')
+                    ->label('Municipio')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina')
-                    ->searchable()
-                    ->sortable(),
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -113,7 +96,7 @@ class CargoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCargos::route('/'),
+            'index' => ManageParroquias::route('/'),
         ];
     }
 }

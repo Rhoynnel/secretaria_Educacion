@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Filament\Resources\Cargos;
+namespace App\Filament\Resources\TipoMovimientos;
 
-use App\Filament\Resources\Cargos\Pages\ManageCargos;
-use App\Models\Cargo;
-use App\Models\Categoria;
-use App\Models\TipoNomina;
+use App\Filament\Resources\TipoMovimientos\Pages\ManageTipoMovimientos;
+use App\Models\TipoMovimiento;
 use BackedEnum;
 use UnitEnum;
 use Filament\Actions\BulkActionGroup;
@@ -14,38 +12,36 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Forms\Components\select;
 
-class CargoResource extends Resource
+class TipoMovimientoResource extends Resource
 {
-    protected static ?string $model = Cargo::class;
+    protected static ?string $model = TipoMovimiento::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup =  'Docentes';
+    protected static string | UnitEnum | null $navigationGroup =  'Credenciales';
 
-    protected static ?string $recordTitleAttribute = 'Cargo';
+    protected static ?string $recordTitleAttribute = 'TipoMovimiento';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('codigo')
-                    ->required(),
                 TextInput::make('nombre')
                     ->required(),
-                Select::make('categoria_id')
+                Select::make('tipo')
                     ->required()
-                    ->options(Categoria::pluck('nombre', 'id')),
-                Select::make('tipo_nomina_id')
-                    ->required()
-                    ->options(TipoNomina::where('status', true)->pluck('nombre', 'id')),
+                    ->options([
+                        'N' => 'Normal',
+                        'T' => 'Traslado',
+                    ]),
             ]);
     }
 
@@ -53,12 +49,8 @@ class CargoResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('codigo'),
                 TextEntry::make('nombre'),
-                TextEntry::make('Categoria.nombre')
-                    ->label('Categoria'),
-                TextEntry::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina'),
+                TextEntry::make('tipo'),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
@@ -71,21 +63,12 @@ class CargoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Cargo')
+            ->recordTitleAttribute('TipoMovimiento')
             ->columns([
-                TextColumn::make('codigo')
-                    ->searchable(),
                 TextColumn::make('nombre')
                     ->searchable(),
-                TextColumn::make('Categoria.nombre')
-                    ->label('Categoria')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('tipo')
+                    ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -113,7 +96,7 @@ class CargoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCargos::route('/'),
+            'index' => ManageTipoMovimientos::route('/'),
         ];
     }
 }

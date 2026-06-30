@@ -1,51 +1,42 @@
 <?php
 
-namespace App\Filament\Resources\Cargos;
+namespace App\Filament\Resources\Periodos;
 
-use App\Filament\Resources\Cargos\Pages\ManageCargos;
-use App\Models\Cargo;
-use App\Models\Categoria;
-use App\Models\TipoNomina;
+use App\Filament\Resources\Periodos\Pages\ManagePeriodos;
+use App\Models\Periodo;
 use BackedEnum;
-use UnitEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Forms\Components\Toggle;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
-use Filament\Forms\Components\select;
 
-class CargoResource extends Resource
+class PeriodoResource extends Resource
 {
-    protected static ?string $model = Cargo::class;
+    protected static ?string $model = Periodo::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static string | UnitEnum | null $navigationGroup =  'Docentes';
-
-    protected static ?string $recordTitleAttribute = 'Cargo';
+    protected static ?string $recordTitleAttribute = 'Periodo';
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextInput::make('codigo')
+                TextInput::make('periodo')
                     ->required(),
-                TextInput::make('nombre')
+                Toggle::make('status')
                     ->required(),
-                Select::make('categoria_id')
-                    ->required()
-                    ->options(Categoria::pluck('nombre', 'id')),
-                Select::make('tipo_nomina_id')
-                    ->required()
-                    ->options(TipoNomina::where('status', true)->pluck('nombre', 'id')),
             ]);
     }
 
@@ -53,12 +44,9 @@ class CargoResource extends Resource
     {
         return $schema
             ->components([
-                TextEntry::make('codigo'),
-                TextEntry::make('nombre'),
-                TextEntry::make('Categoria.nombre')
-                    ->label('Categoria'),
-                TextEntry::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina'),
+                TextEntry::make('periodo'),
+                IconEntry::make('status')
+                    ->boolean(),
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
@@ -71,21 +59,14 @@ class CargoResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->recordTitleAttribute('Cargo')
+            ->recordTitleAttribute('Periodo')
             ->columns([
-                TextColumn::make('codigo')
+                TextColumn::make('periodo')
                     ->searchable(),
-                TextColumn::make('nombre')
-                    ->searchable(),
-                TextColumn::make('Categoria.nombre')
-                    ->label('Categoria')
-                    ->searchable()
+                IconColumn::make('status')
+                    ->boolean()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('TipoNomina.nombre')
-                    ->label('Tipo de Nómina')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -113,7 +94,7 @@ class CargoResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ManageCargos::route('/'),
+            'index' => ManagePeriodos::route('/'),
         ];
     }
 }

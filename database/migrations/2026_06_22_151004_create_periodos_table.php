@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('comun.periodos', function (Blueprint $table) {
             $table->id();
             $table->string('periodo')->unique();
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }
