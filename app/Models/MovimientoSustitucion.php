@@ -11,4 +11,6 @@ class MovimientoSustitucion extends Model
     protected $fillable = [
         'nombre',
     ];
+
+    
 }

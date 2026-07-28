@@ -100,7 +100,8 @@ class PersonaResource extends Resource
             ->columns([
                 TextColumn::make('cedula')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('nombres')
                     ->searchable(),
                 TextColumn::make('apellidos')
