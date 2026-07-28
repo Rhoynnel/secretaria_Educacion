@@ -15,7 +15,7 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
-                    <flux:sidebar.item icon="users" :href="route('filament.admin.resources.personas.index')" :current="request()->routeIs('personas.*')" wire:navigate>
+                    <flux:sidebar.item icon="users" :href="route('dashboard')" :current="request()->routeIs('personas.*')" wire:navigate>
                         {{ __('Personas') }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
