@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nomina.categorias', function (Blueprint $table) {
+        Schema::create('nomina.motivo__egresos', function (Blueprint $table) {
             $table->id();
-            $table->integer('codigo')->unique();
-            $table->string('nombre');
-            $table->decimal('sueldo', 10, 5);
+            $table->string('descripcion', 200);
             $table->timestamps();
         });
     }
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nomina.categorias');
+        Schema::dropIfExists('nomina.motivo__egresos');
     }
 };

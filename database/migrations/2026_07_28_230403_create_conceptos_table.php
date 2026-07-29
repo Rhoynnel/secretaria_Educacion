@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('nomina.categorias', function (Blueprint $table) {
+        Schema::create('nomina.conceptos', function (Blueprint $table) {
             $table->id();
-            $table->integer('codigo')->unique();
-            $table->string('nombre');
-            $table->decimal('sueldo', 10, 5);
+            $table->string('codigo', 3);
+            $table->string('nombre', 200);
+            $table->integer('id_tipo_concepto');
+            $table->integer('id_partida')->references('id')->on('nomina.partidas')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('nomina.categorias');
+        Schema::dropIfExists('nomina.conceptos');
     }
 };
